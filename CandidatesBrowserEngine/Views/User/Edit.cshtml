@@ -1,0 +1,41 @@
+﻿@model CandidatesBrowserEngine.Models.ViewModels.Account.EditUserViewModel
+<h1 class="text-info">Edit User</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <form method="post" asp-action="Edit">
+            <input asp-for="@Model.UserViewModel.Id" hidden />
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="UserViewModel.Name"></label>
+                <input asp-for="UserViewModel.Name" class="form-control" />
+                <span asp-validation-for="UserViewModel.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UserViewModel.Email"></label>
+                <input asp-for="UserViewModel.Email" readonly class="form-control" />
+                <input asp-for="UserViewModel.Email" hidden />
+            </div>
+            <div class="form-group">
+                <label asp-for="UserViewModel.RoleId"></label>
+                <select asp-for="UserViewModel.RoleId" asp-items="Model.RoleList" class="form-control">
+                    <option disabled selected>--Select Role--</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Edit</button>
+                <a asp-action="Index" class="btn btn-warning" style="width:auto">Back to User</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        StartThisSessionTimer();
+    });
+
+</script>

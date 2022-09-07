@@ -1,0 +1,63 @@
+﻿@model CandidatesBrowserEngine.Models.ViewModels.Account.ExternalLoginConfirmationViewModel
+<h1 class="text-info">Login</h1>
+
+<div class="row">
+    <div class="col-4">
+        <h4>Associate your @ViewData["ProviderDisplayName"] account</h4>
+    </div>
+    <div class="col-4">
+        @if (Model.Picture != null)
+        {
+            <img src="@Model.Picture" />
+        }
+
+    </div>
+</div>
+
+
+    
+
+
+<form asp-controller="Account" asp-action="ExternalLoginConfirmationSignIn" method="post" role="form" asp-route-returnUrl="@ViewData["ReturnUrl"]" asp-route-providerName="@ViewData["ProviderDisplayName"]">
+
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <p>
+        You have been successfully authenticated with <strong>@ViewData["ProviderDisplayName"]</strong>
+        @if (@ViewData["ProviderDisplayName"].ToString() == "Google")
+        {
+            <i style="background-color: #dd4b39; color: white " class="fa fa-google-plus"></i>
+
+        }
+        @if (@ViewData["ProviderDisplayName"].ToString() == "Facebook")
+        {
+            <i style="background-color: #3B5998; color: white " class="fa fa-facebook"></i>
+
+        }
+        . Please enter your user name and click Login to proceed
+    </p>
+    <div class="form-group">
+        <label asp-for="Email" class="col-md-2"></label>
+        <div class="col-md-10">
+            <input asp-for="Email" readonly class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Name" class="col-md-2"></label>
+        <div class="col-md-10">
+            <input asp-for="Name" readonly class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-success form-control">Login</button>
+        </div>
+    </div>
+</form>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

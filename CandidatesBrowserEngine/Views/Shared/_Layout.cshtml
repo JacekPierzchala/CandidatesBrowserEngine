@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CandidatesBrowserEngine</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2020.2.513/styles/kendo.default-v2.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome.css" />
+    <link rel="stylesheet" href="~/lib/font-Awesome/css/regular.min.css">
+    <link rel="stylesheet" href="~/lib/font-Awesome/css/solid.min.css">
+    <link rel="stylesheet" href="~/lib/select2/css/select2.css" />
+    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon" />
+    <link runat="server" rel="icon" href="~/favicon.ico" type="image/ico" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.6.0/bootstrap-social.min.css" rel="stylesheet" media="all">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+</head>
+<body>
+    @using Microsoft.AspNetCore.Identity
+    @inject SignInManager<ApplicationUser> SignInManager
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
+            <div class="container pl-3">
+                
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a class="navbar-brand" asp-controller="CandidatesMainView" asp-action="Index">Candidates Home</a>
+                    if (User.IsInRole(CandidatesBrowserEngine.Utilities.Helper.Admin))
+                    {
+                        <a class="navbar-brand" asp-controller="User" asp-action="Index">Users</a>
+                    }
+
+                }
+                <span id="spanTimeLeft" hidden class="btn btn-danger"></span>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                            <partial name="_LoginPartial" />
+                        </li>
+                        @*<li class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <a class="text-white nav-link" asp-controller="AccountSettings" asp-action="Index">Account Settings <i class="fas fa-user-edit"></i></a>
+                    }
+                </li>*@
+                    </ul>
+                </div>
+
+
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <partial name="_Notification" />
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p>&copy; <span id="year"></span> CandidatesBrowserEngine </p>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <script src="~/js/candidatesScripts.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/lib/select2/js/select2.full.min.js"></script>
+    <script type="text/javascript" src="~/js/notify.min.js"></script>
+    <script>
+        $('#year').text(new Date().getFullYear());
+        $("body").on('click keypress', function () {
+            ResetThisSession();
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

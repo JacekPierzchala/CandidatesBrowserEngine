@@ -1,0 +1,17 @@
+﻿
+@if (TempData[CandidatesBrowserEngine.Utilities.Helper.Success] != null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.success('@TempData[CandidatesBrowserEngine.Utilities.Helper.Success]');
+    </script>
+}
+@if (TempData[CandidatesBrowserEngine.Utilities.Helper.Error] != null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.error('@TempData[CandidatesBrowserEngine.Utilities.Helper.Error]');
+    </script>
+}

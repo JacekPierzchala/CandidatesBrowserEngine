@@ -1,0 +1,101 @@
+﻿@model CandidatesBrowserEngine.Models.ViewModels.LoginViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+
+<div class="row mt-4">
+    <div class="col-md-4">
+            <form id="account" method="post" asp-action="Login" asp-route-returnUrl=@ViewData["ReturnUrl"] asp-controller="Account">
+                <div class="form-group row ml-1">
+                    <h5>Sign in using email & password.</h5>
+                    <i class="fas fa-arrow-alt-circle-down ml-2 mt-1"></i>
+                </div>
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label  asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" />
+                     <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password"></label> 
+                     <input asp-for="Password" class="form-control" />
+                     <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">         
+                   <div class="custom-checkbox">
+                            <label asp-for="RememberMe">
+                                <input asp-for="RememberMe" />
+                                @Html.DisplayNameFor(m => m.RememberMe)
+                            </label>
+                    </div>          
+                </div>
+                <div class="form-group">
+                    <div>
+                        <input type="submit" value="Log In" class="btn btn-success w-50" />
+                    </div>
+                </div>
+                <hr />
+                <div class="form-group">
+                    <div>
+                        <a asp-action="Register" class="btn btn-success w-50">Sign Up</a>
+                    </div>
+                </div>
+                <p >
+                    <a asp-action="ForgotPassword">Forgot you Password?</a>
+                </p>
+                <p >
+                    <a asp-action="ResendEmail">Resend email confirmation</a>
+                </p>
+            </form>
+
+    </div>
+    @{
+        var schemes = await SignInManager.GetExternalAuthenticationSchemesAsync();
+        var loginProviders = schemes.ToList();
+
+    }
+
+    @if (loginProviders.Count() > 0)
+    {
+        <div class="col-md-6 col-md-offset-2">
+            <section>
+                <div class="form-group row ml-1">
+                    <h5>Use another sevice to Log in. </h5>
+                    <i class="fas fa-arrow-alt-circle-down ml-2 mt-1"></i>
+                </div>
+                <hr />
+                <form asp-controller="Account" class="ml-5" asp-action="ExternalLoginSignIn" asp-route-returnUrl=@ViewData["ReturnUrl"] method="post" role="form">
+                    <div>
+                        <p>
+                            @foreach (var provider in loginProviders
+                     @*          // //.Where(e => e.Name != "Facebook")*@
+                            )
+                            {
+                                <button type="submit" class="btn btn-primary btn-@provider.Name.ToLower() w-100 m-1" name="provider" value="@provider.Name"
+                                        title="Login using your @provider.Name account">
+                                    @provider.Name
+                                    <i class="fa fa-@provider.Name.ToLower()"></i>
+                                </button>
+
+                            }
+                        </p>
+                    </div>
+                </form>
+            </section>
+        </div>
+    }
+    else
+    {
+        <div>
+            <p>
+                There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                for details on setting up this ASP.NET application to support logging in via external services.
+            </p>
+        </div>
+    }
+</div>
+
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

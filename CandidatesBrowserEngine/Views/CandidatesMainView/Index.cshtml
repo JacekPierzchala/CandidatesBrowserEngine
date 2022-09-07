@@ -1,0 +1,170 @@
+﻿
+@using Microsoft.AspNetCore.Http
+@using X.PagedList.Web.Common;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Bootstrap4.Core
+
+
+@inject IHttpContextAccessor HttpContextAccessor
+@model CandidatesBrowserEngine.Models.ViewModels.CandidateSearchViewModel
+
+
+<div class="row">
+
+    <p>
+        <div class="col-6">
+            <a class="btn btn-primary" data-toggle="collapse" href="#showAllFiltersMenu" role="button" aria-expanded="false" aria-controls="showAllFiltersMenu">
+                <i class="fas fa-arrow-circle-down"></i> Show All Filters
+            </a>
+        </div>
+        <div class="col-6" >
+            <a class="btn btn-primary text-white" role="button" aria-expanded="false" asp-controller="AddCandidate" asp-action="AddNew">
+                <i class="fas fa-user-plus"></i> Add New Candidate
+            </a>
+        </div>
+
+    </p>
+    <div class="row ml-1 mt-2">
+        <div class="col">
+            <div class="collapse multi-collapse" id="showAllFiltersMenu">
+                <div class="container">
+                    <form id="search" asp-action="Index" method="get" asp-controller="CandidatesMainView">
+                        <input asp-for="PageChanged" value="false" hidden />
+                        <input asp-for="PageNumber" value="1" hidden />
+                        <div class="form-group row pt-1">
+                            <label class="col-2">First Name:</label>
+                            <div class="col-4">
+                                <input asp-for="FirstName" class="form-control" />
+                            </div>
+                            <label class="col-2">Last Name:</label>
+                            <div class="col-4">
+                                <input asp-for="LastName" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group row pt-1 pl-3 pr-3">
+                            <label>Projects:</label>
+                            <select multiple="multiple" asp-for="ProjectIds" asp-items="@Model.ProjectList" class="mySelect2">
+                            </select>
+                        </div>
+                        <div class="form-group row pt-1 pl-3 pr-3">
+                            <label>Companies:</label>
+                            <select multiple="multiple" asp-for="CompanyIds" asp-items="@Model.CompaniesList" class="mySelect2">
+                            </select>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col pl-3">
+                                <input width="30" type="submit" value="Search" class="btn btn-success" />
+                            </div>
+
+                        </div>
+                    </form>
+
+                    <form id="reset" asp-action="Index" method="post" asp-controller="CandidatesMainView">
+                        <div class="form-group row">
+                            <div class="col pl-3">
+                                <input width="30" type="submit" value="Reset  " class="btn btn-success" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="container col-md-12">
+        <div class="container">
+            <table id="candidates" class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th> Candidate</th>
+                        <th width="35%">Projects</th>
+                        <th width="35%">Company</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Candidates)
+                    {
+                        <tr>
+                            <td>
+                    
+                                <a asp-controller="CandidateDetails" asp-action="Index" asp-route-id="@item.Id">
+                                    <img src="~/images/@item.ProfilePicture"
+                                         class="rounded-circle ml-3"
+                                         height="65" width="65"
+                                         asp-append-version="true" />
+                                    <div class="container"> @item.FullName</div>
+
+                                </a>                           
+                            </td>
+                            <td width="35%">
+                                <ul>
+                                    @foreach (var project in item.Projects)
+                                    {
+                                        <li>
+                                            <p>@project.ProjectName</p>
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                            <td width="35%">
+                                <ul class="timeline align-items-start">
+                                    @foreach (var company in item.Companies)
+                                    {
+                                        <li>
+                                            <p>@company.CompanyName</p>
+                                            <p>@company.DateRange</p>
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                            <td>
+                                @if (User.IsInRole(CandidatesBrowserEngine.Utilities.Helper.Admin))
+                                {
+                                    <a class="btn btn-danger" href="#" onclick="onCandidateDelete(@item.Id)"><i class=" fas fa-trash-alt"></i></a>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <br />
+            Page @(Model.Candidates.PageCount < Model.Candidates.PageNumber ? 0 : Model.Candidates.PageNumber) of @Model.Candidates.PageCount
+        
+            <div class="row mt-2">
+                <div class="col">
+                    @Html.PagedListPager(Model.Candidates, page => Url.Action("Index",
+                    new { viewModel = Model, page, pageChanged = true }), Bootstrap4PagedListRenderOptions.OnlyShowFivePagesAtATime)
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<div class="text-right pt-2">
+    <p>@HttpContextAccessor.HttpContext.Session.GetString("ssuserName") 's account is logged in</p>
+</div>
+
+<script>
+    $(document).ready(function () {
+       var candidates = @Model.RecordsCount;
+        $.notify(candidates + " record(s) received", "success");
+        StartThisSessionTimer();
+        $(".mySelect2").select2();
+    });
+
+</script>
+
+
+
+

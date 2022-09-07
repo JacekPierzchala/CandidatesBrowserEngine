@@ -1,0 +1,81 @@
+﻿
+<div class="modal fade" role="dialog" id="candidateEditInput" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-lg">
+            <form id="candidateEditForm" autocomplete="off" novalidate="novalidate">
+                <div class="modal-body">
+                    <div class="container mt-1">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5">
+                                <img class="rounded-circle" id="profileEditImage"
+                                     height="250" width="250">
+
+                                <label for="Profile Image" class="control-label"></label>
+                                <div class="custom-file">
+                                    <input onchange="onCandidateEditPictureChange()" type="file" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">Change picture</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-8 col-md-5">
+                                <div class="d-flex flex-column bg-dark text-white p-2">
+                                    <input type="hidden" id="id" />
+                                    <div class="row pt-1">
+                                        <label class="col-6 align-right">First Name:</label>
+                                        <label class="col-6 align-content-end">Last Name:</label>
+                                    </div>
+                                    <div class="row pt-1">
+                                        <div class="col-6">
+                                            <input id="firstName" class="form-control" />
+                                        </div>
+                                        <div class="col-6">
+                                            <input id="lastName" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="row pt-2">
+                                        <label class="col-6 align-right">
+                                            <i class="fas fa-baby"></i> Date Of Bith:
+                                        </label>
+                                        <label class="col-6 align-content-end">
+                                            <i class="fas fa-envelope"></i> Email:
+                                        </label>
+                                    </div>
+
+                                    <div class="row pt-1">
+                                        <div class="col-6">
+                                            <input type="date" id="dateOfBirth" />
+                                        </div>
+                                        <div class="col-6">
+                                            <input id="email" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="row pt-1">
+                                        <label class="align-right col-12">
+                                            <i class="fas fa-user-astronaut"></i> About:
+                                        </label>
+                                    </div>
+                                    <div class="row pt-1">
+                                        <div class="col-12">
+                                            <textarea rows="3" id="description" class="form-control" wrap="soft" maxlength="100"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSubmit" class="btn btn-success" onclick="onSaveEditCandidateModal()">Submit</button>
+                    <button type="button" class="btn btn-secondary" onclick="onCloseEditCandidateModal()">Close</button> &nbsp;
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+       // StartThisSessionTimer();
+    });
+
+</script>

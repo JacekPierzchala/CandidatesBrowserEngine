@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewData["Title"] = "Accont Settings";
+}
+<div class="text-center mt-2">
+    @if (User.Identity.IsAuthenticated)
+    {
+        var twoFactor = @ViewData["TwofactorEnabled"];
+        if (twoFactor != null && twoFactor.ToString().ToLower() == "true")
+        {
+            <a asp-action="RemoveAuthenticator" class="btn btn-warning" asp-controller="Account">Reset & Remove Two Factor Auth</a>
+
+        }
+        else
+        {
+            <a asp-action = "EnableAuthenticator" asp-controller = "Account" > Setup Two Factor Auth </a>
+        }
+       
+    }
+
+
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        StartThisSessionTimer();
+    });
+
+</script>

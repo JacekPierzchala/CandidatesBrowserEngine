@@ -1,0 +1,155 @@
+﻿
+@using Microsoft.AspNetCore.Http
+@using X.PagedList.Web.Common;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Bootstrap4.Core
+
+
+@inject IHttpContextAccessor HttpContextAccessor
+@model CandidatesBrowserEngine.Models.ViewModels.CandidateDetailsViewModel
+
+<div class="container">
+    <partial name="_AddEditCandidatePartial" />
+    <form asp-action="Index" method="post" enctype="multipart/form-data">
+        <input asp-for="Id" hidden />
+        <div class="row">
+            <div class="col-11">
+                @*<button asp-action="Index" type="submit" class="btn btn-success ml-3 mt-1">Update <i class="fas fa-save"></i> </button>*@
+                <a class="btn btn-success ml-3 mt-1" style="width:220px" asp-controller="CandidatesMainView" asp-route-pagechanged="true" asp-action="Index">Back To Search Results <i class="fas fa-backward"></i> </a>
+                @*<button type="submit" class="btn btn-success ml-3 mt-1" asp-action="Index" asp-id="@Model.Id" formmethod="get">Restore <i class="fas fa-retweet"></i> </button>*@
+            </div>
+        </div>
+        <div asp-validation-summary="All" class="text-danger"></div>
+       
+        <div class="container mt-1">
+            <a href="#" onclick="editCandidate(@Model.Id)" class="btn btn-success" style="width:120px" ><i class="fas fa-user-edit"></i></a>
+            <div class="row">
+                <div class="col-lg-4 col-md-5 mt-3">
+                    <img class="rounded-circle ml-3" id="profileImage"
+                         height="250" width="250" src="~/images/@Model.ProfilePicture">
+
+
+                </div>
+                <div class="col-lg-8 col-md-5">
+                    <div class="d-flex flex-column bg-dark text-white p-2">
+
+                        <div class="row pt-1">
+                            <label class="col-6 align-right">First Name:</label>
+                            <label class="col-6 align-content-end">Last Name:</label>
+                        </div>
+                        <div class="row pt-1">
+                            <div class="col-6">
+                                <input readonly asp-for="FirstName" class="form-control" />
+                            </div>
+                            <div class="col-6">
+                                <input readonly id="lastNameView" asp-for="LastName" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row pt-2">
+                            <label class="col-6 align-right">
+                                <i class="fas fa-baby"></i> Date Of Bith:
+                            </label>
+                            <label class="col-6 align-content-end">
+                                <i class="fas fa-envelope"></i> Email:
+                            </label>
+                        </div>
+
+                        <div class="row pt-1">
+                            <div class="col-6">
+                                <input readonly asp-for="DateOfBirth" class="form-control" />
+                            </div>
+                            <div class="col-6">
+                                <input readonly asp-for="Email" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row pt-1">
+                            <label class="align-right col-12">
+                                <i class="fas fa-user-astronaut"></i> About:
+                            </label>
+                        </div>
+                        <div class="row pt-1">
+                            <div class="col-12">
+                                <textarea rows="3" readonly asp-for="Description" class="form-control" wrap="soft" maxlength="100"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+           
+
+        </div>
+
+        <div class="container mt-1">
+            <div class="row mt-1">
+                <div class="col-12">
+                    <div class="d-flex flex-column  bg-dark text-white" style="display: inline-block">
+                        <label class="bg-dark align-content-lg-center text-white ml-5 p-1 pl-5">
+                            <i class="fas fa-business-time"></i> Companies:
+                            <a class="btn btn-success" href="#" onclick="onCompanyEditChange(0,@Model.Id)"><i class="fas fa-plus-circle"></i> Add</a>
+                        </label>
+
+                    </div>
+                    <ul class="timeline align-items-start mt-2 ml-5">
+                        @foreach (var company in Model.Companies)
+                        {
+                            <li >
+                                <a class="btnEdit" href="#" onclick="onCompanyEditChange(@company.Id,@Model.Id)">
+                                    <p>@company.CompanyName</p>
+                                    <p>@company.DateRange</p>
+                                </a>
+                                <a class="btn btn-danger" href="#"  onclick="onCompanyDelete(@company.Id)" ><i class=" fas fa-trash-alt"></i></a>
+
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <partial name="_CompanyEditPartial"  />
+                @*<div class="col-lg-8 col-md-5" id="companySection">
+
+                </div>*@
+            </div>
+        </div>
+       
+        <div class="container mt-1">
+
+            <div class="row mt-1">
+                <div class="col-12">
+                    <div class="d-flex flex-column bg-dark text-white align-content-center">
+                        <label class="bg-dark align-content-lg-center text-white p-1 pl-5 ml-5">
+                            <i class="fas fa-project-diagram"></i> Projects:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a class="btn btn-success" href="#" onclick="onProjectEditChange(0,@Model.Id)"><i class="fas fa-plus-circle"></i> Add</a>
+                        </label>
+                    </div>
+                    <ol class="mt-2 ml-5">
+                        @foreach (var project in Model.Projects)
+                        {
+                            <li class="ml-5">
+                                <a class="btnEdit" href="#" onclick="onProjectEditChange(@project.Id,@Model.Id)">
+                                    <p>@project.ProjectName </p>
+                                </a>
+                                <a class="btn btn-danger" href="#" onclick="onProjectDelete(@project.Id)"><i class=" fas fa-trash-alt"></i></a>
+                            </li>
+                        }
+                    </ol>
+                </div>
+                <partial name="_ProjectEditPartial" />
+            </div>
+            </div>
+
+
+    </form>  
+
+</div>
+<script>
+    $(document).ready(function () {
+       StartThisSessionTimer();
+       // Test();
+    });
+
+</script>
+
+
+
+

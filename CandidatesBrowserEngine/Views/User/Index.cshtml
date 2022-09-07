@@ -1,0 +1,81 @@
+﻿@model IEnumerable<CandidatesBrowserEngine.Models.ViewModels.Account.UserViewModel>
+<br />
+<div class="row">
+    <div class="col-6">
+        <h5 class="text-primary">User List </h5>
+    </div>
+</div>
+<div class="container col-12">
+    <div class="container">
+        @if (Model.Count() > 0)
+        {
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Email</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th> LastAccess </th>
+                        <th>DateCreated</th>
+                        <th></th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td width="10%">
+                                @item.Email
+                            </td>
+                            <td width="10%">
+                                @item.Name
+                            </td>
+                            <td width="10%">
+                                @item.Role
+                            </td>
+                            <td width="10%">
+                                @item.LastAccess
+                            </td>
+                            <td width="10%">
+                                @item.DateCreated
+                            </td>
+                            <td>
+                                <div class="container">
+                                    <form asp-action="Delete" asp-route-userId="@item.Id">
+                                        <a asp-action="Edit" asp-route-userId="@item.Id" class="btn btn-info text-white  mt-1" style="cursor:pointer">Edit</a>
+                                        @if (item.LockoutEnd == null || item.LockoutEnd < DateTime.Now)
+                                        {
+                                            <button asp-action="LockUnlock" asp-route-userId="@item.Id" class="btn btn-success text-white  mt-1" style="cursor:pointer">
+                                                <span>Lock</span>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button asp-action="LockUnlock" asp-route-userId="@item.Id" class="btn btn-warning text-white  mt-1" style="cursor:pointer">
+                                                <span>UnLock</span>
+                                            </button>
+                                        }
+                                        <button type="submit" onclick="return confirm('Are you sure to delete this?')" class="btn btn-danger mt-1">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        }
+
+    </div>
+   
+    </div>
+
+<script>
+    $(document).ready(function () {
+        StartThisSessionTimer();
+    });
+
+</script>
